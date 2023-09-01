@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "9952c2a3ec1b421e408df0d20c8f0c7f"
+RANDOMIZERBASEHASH: str = "716c8f763ccf18b5ad875823b7131f01"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -1146,7 +1146,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_bytes(0x184000, [
         # original_item, limit, replacement_item, filler
         0x12, 0x01, 0x35, 0xFF,  # lamp -> 5 rupees
-        0x51, 0x06, 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade
+        0x51, 0x00 if world.bomb_bag[player] else 0x06, 0x31 if world.bomb_bag[player] else 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade. If bomb_bag -> turns into Bombs (10)
         0x53, 0x06, 0x54, 0xFF,  # 6 +5 arrow upgrades -> +10 arrow upgrade
         0x58, 0x01, 0x36 if world.retro_bow[player] else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
         0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff,  # boss heart -> green 20
@@ -1280,7 +1280,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     equip[0x36C] = 0x18
     equip[0x36D] = 0x18
     equip[0x379] = 0x68
-    starting_max_bombs = 10
+    starting_max_bombs = 0 if world.bomb_bag[player] else 10
     starting_max_arrows = 30
 
     startingstate = CollectionState(world)
@@ -1787,7 +1787,7 @@ def apply_oof_sfx(rom, oof: str):
 
     # Credit to kan for this method, and Nyx for initial C# implementation
     # this is ported from, with both of their permission for use by AP
-    # Original C# implementation:
+    # Original C# implementation
     # https://github.com/Nyx-Edelstein/The-Unachievable-Ideal-of-Chibi-Elf-Grunting-Noises-When-They-Get-Punched-A-Z3-Rom-Patcher
 
     # Jump execution from the SPC load routine to new code

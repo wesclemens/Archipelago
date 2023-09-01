@@ -28,6 +28,12 @@ def can_shoot_arrows(state: CollectionState, player: int) -> bool:
         return (state.has('Bow', player) or state.has('Silver Bow', player)) and can_buy(state, 'Single Arrow', player)
     return state.has('Bow', player) or state.has('Silver Bow', player)
 
+def can_use_bombs(state: CollectionState, player: int):
+    if not state.multiworld.bomb_bag[player]:
+        return True
+    # Need to fix +5 bombs stuff
+    #return state.has('Bomb Upgrade (+10)', player) or state.has('Bomb Upgrade (+5)', player)
+    return state.has('Bomb Upgrade (+10)', player)
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
     count = state.multiworld.treasure_hunt_count[player]
@@ -41,7 +47,6 @@ def has_crystals(state: CollectionState, count: int, player: int) -> bool:
 
 def can_lift_rocks(state: CollectionState, player: int):
     return state.has('Power Glove', player) or state.has('Titans Mitts', player)
-
 
 def can_lift_heavy_rocks(state: CollectionState, player: int) -> bool:
     return state.has('Titans Mitts', player)

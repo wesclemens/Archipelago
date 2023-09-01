@@ -299,6 +299,9 @@ class PotShuffle(Toggle):
     """Shuffle contents of pots within "supertiles" (item will still be nearby original placement)."""
     display_name = "Pot Shuffle"
 
+class BombBag(Toggle):
+    """If on, a bomb bag will be required before bombs can be used."""
+    display_name = "Bomb Bag"
 
 class Palette(Choice):
     option_default = 0
@@ -446,6 +449,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
+    "bomb_bag": BombBag,
     "shop_item_slots": ShopItemSlots,
     "shop_price_modifier": ShopPriceModifier,
     "tile_shuffle": TileShuffle,

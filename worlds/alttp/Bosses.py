@@ -5,7 +5,7 @@ from typing import Optional, Union, List, Tuple, Callable, Dict, TYPE_CHECKING
 
 from Fill import FillError
 from .Options import LTTPBosses as Bosses
-from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, has_sword, has_beam_sword, \
+from .StateHelpers import can_shoot_arrows, can_extend_magic, can_get_good_bee, can_use_bombs, has_sword, has_beam_sword, \
     has_melee_weapon, has_fire_source
 
 if TYPE_CHECKING:
@@ -52,7 +52,7 @@ def LanmolasDefeatRule(state, player: int) -> bool:
             state.has('Fire Rod', player) or
             state.has('Ice Rod', player) or
             state.has('Cane of Somaria', player) or
-            state.has('Cane of Byrna', player) or
+            (state.has('Cane of Byrna', player) and can_use_bombs(state, player)) or
             can_shoot_arrows(state, player))
 
 
@@ -61,8 +61,7 @@ def MoldormDefeatRule(state, player: int) -> bool:
 
 
 def HelmasaurKingDefeatRule(state, player: int) -> bool:
-    # TODO: technically possible with the hammer
-    return has_sword(state, player) or can_shoot_arrows(state, player)
+    return (state.has('Hammer', player) or can_use_bombs(state, player)) and (has_sword(state, player) or can_shoot_arrows(state, player))
 
 
 def ArrghusDefeatRule(state, player: int) -> bool:
@@ -76,7 +75,7 @@ def ArrghusDefeatRule(state, player: int) -> bool:
 
     return ((state.has('Fire Rod', player) and (can_shoot_arrows(state, player) or can_extend_magic(state, player,
                                                                                                          12))) or  # assuming mostly gitting two puff with one shot
-            (state.has('Ice Rod', player) and (can_shoot_arrows(state, player) or can_extend_magic(state, player, 16))))
+            (state.has('Ice Rod', player) and can_use_bombs(state, player) and (can_shoot_arrows(state, player) or can_extend_magic(state, player, 16))))
 
 
 def MothulaDefeatRule(state, player: int) -> bool:
@@ -118,7 +117,7 @@ def KholdstareDefeatRule(state, player: int) -> bool:
 
 
 def VitreousDefeatRule(state, player: int) -> bool:
-    return can_shoot_arrows(state, player) or has_melee_weapon(state, player)
+    return (can_shoot_arrows(state, player) and can_use_bombs(state, player)) or has_melee_weapon(state, player)
 
 
 def TrinexxDefeatRule(state, player: int) -> bool:
