@@ -320,6 +320,15 @@ def global_rules(world, player):
             item_name_in_location_names(state, 'Big Key (Ice Palace)', player, [('Ice Palace - Spike Room', player), ('Ice Palace - Big Key Chest', player), ('Ice Palace - Map Chest', player)]) and state._lttp_has_key('Small Key (Ice Palace)', player))) and (state.multiworld.can_take_damage[player] or state.has('Hookshot', player) or state.has('Cape', player) or state.has('Cane of Byrna', player)))
     set_rule(world.get_entrance('Ice Palace (East Top)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player))
 
+    # Hacky solution to make bomb bags work please fix me
+    set_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Iced T Room', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Spike Room', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Big Key Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Map Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Ice Palace - Boss', player), lambda state: can_use_bombs(state, player))
+
     set_rule(world.get_entrance('Misery Mire Entrance Gap', player), lambda state: (state.has('Pegasus Boots', player) or state.has('Hookshot', player)) and (has_sword(state, player) or state.has('Fire Rod', player) or state.has('Ice Rod', player) or state.has('Hammer', player) or state.has('Cane of Somaria', player) or can_shoot_arrows(state, player)))  # need to defeat wizzrobes, bombs don't work ...
     set_rule(world.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
     set_rule(world.get_location('Misery Mire - Spike Chest', player), lambda state: (state.multiworld.can_take_damage[player] and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
@@ -362,8 +371,8 @@ def global_rules(world, player):
     set_rule(world.get_location('Palace of Darkness - The Arena - Ledge', player), lambda state: can_use_bombs(state, player))
     set_rule(world.get_location('Palace of Darkness - Big Chest', player), lambda state: state.has('Big Key (Palace of Darkness)', player) and can_use_bombs(state, player))
 
-    set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
-            location_item_name(state, 'Palace of Darkness - Big Key Chest', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 3)))
+    set_rule(world.get_entrance('Palace of Darkness Big Key Chest Staircase', player), lambda state: (state._lttp_has_key('Small Key (Palace of Darkness)', player, 6) or (
+            location_item_name(state, 'Palace of Darkness - Big Key Chest', player) in [('Small Key (Palace of Darkness)', player)] and state._lttp_has_key('Small Key (Palace of Darkness)', player, 3))) and can_use_bombs(state, player))
     if world.accessibility[player] != 'locations':
         set_always_allow(world.get_location('Palace of Darkness - Big Key Chest', player), lambda state, item: item.name == 'Small Key (Palace of Darkness)' and item.player == player and state._lttp_has_key('Small Key (Palace of Darkness)', player, 5))
 
@@ -519,7 +528,7 @@ def default_rules(world, player):
     set_rule(world.get_entrance('Lake Hylia Island Mirror Spot', player), lambda state: state.has('Moon Pearl', player) and state.has('Magic Mirror', player) and state.has('Flippers', player))
     set_rule(world.get_entrance('Lake Hylia Central Island Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('East Dark World River Pier', player), lambda state: state.has('Moon Pearl', player) and state.has('Flippers', player))
-    set_rule(world.get_entrance('Graveyard Ledge Mirror Spot', player), lambda state: state.has('Moon Pearl', player) and state.has('Magic Mirror', player))
+    set_rule(world.get_entrance('Graveyard Ledge Mirror Spot', player), lambda state: state.has('Moon Pearl', player) and state.has('Magic Mirror', player) and can_use_bombs(state, player))
     set_rule(world.get_entrance('Bumper Cave Entrance Rock', player), lambda state: state.has('Moon Pearl', player) and can_lift_rocks(state, player))
     set_rule(world.get_entrance('Bumper Cave Ledge Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
     set_rule(world.get_entrance('Bat Cave Drop Ledge Mirror Spot', player), lambda state: state.has('Magic Mirror', player))
