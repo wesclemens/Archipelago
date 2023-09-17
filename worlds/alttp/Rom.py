@@ -25,7 +25,6 @@ from Utils import local_path, user_path, int16_as_bytes, int32_as_bytes, snes_to
 
 from .Shops import ShopType, ShopPriceType
 from .Dungeons import dungeon_music_addresses
-from .Regions import old_location_address_to_new_location_address
 from .Text import MultiByteTextMapper, text_addresses, Credits, TextTable
 from .Text import Uncle_texts, Ganon1_texts, TavernMan_texts, Sahasrahla2_texts, Triforce_texts, \
     Blind_texts, \
@@ -782,34 +781,34 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
 
         if not location.crystal:
 
-            if location.item is not None:
-                if not location.native_item:
-                    if location.item.trap:
-                        itemid = 0x5A  # Nothing, which disguises
-                    else:
-                        itemid = get_nonnative_item_sprite(location.item.code)
-                # Keys in their native dungeon should use the orignal item code for keys
-                elif location.parent_region.dungeon:
-                    if location.parent_region.dungeon.is_dungeon_item(location.item):
-                        if location.item.bigkey:
-                            itemid = 0x32
-                        elif location.item.smallkey:
-                            itemid = 0x24
-                        elif location.item.map:
-                            itemid = 0x33
-                        elif location.item.compass:
-                            itemid = 0x25
-                # if world.worlds[player].remote_items:  # remote items does not currently work
-                #     itemid = list(location_table.keys()).index(location.name) + 1
-                #     assert itemid < 0x100
-                #     rom.write_byte(location.player_address, 0xFF)
-                if location.item.player != player:
-                    if location.player_address is not None:
-                        rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
-                    else:
-                        itemid = 0x5A
-            location_address = old_location_address_to_new_location_address.get(location.address, location.address)
-            rom.write_byte(location_address, itemid)
+            assert location.item is not None
+
+            if not location.native_item:
+                if location.item.trap:
+                    itemid = 0x5A  # Nothing, which disguises
+                else:
+                    itemid = get_nonnative_item_sprite(location.item.code)
+            # Keys in their native dungeon should use the orignal item code for keys
+            elif location.parent_region.dungeon:
+                if location.parent_region.dungeon.is_dungeon_item(location.item):
+                    if location.item.bigkey:
+                        itemid = 0x32
+                    elif location.item.smallkey:
+                        itemid = 0x24
+                    elif location.item.map:
+                        itemid = 0x33
+                    elif location.item.compass:
+                        itemid = 0x25
+            # if world.worlds[player].remote_items:  # remote items does not currently work
+            #     itemid = list(location_table.keys()).index(location.name) + 1
+            #     assert itemid < 0x100
+            #     rom.write_byte(location.player_address, 0xFF)
+            if location.item.player != player:
+                if location.player_address is not None:
+                    rom.write_byte(location.player_address, min(location.item.player, ROM_PLAYER_LIMIT))
+                else:
+                    itemid = 0x5A
+            rom.write_byte(location.address, itemid)
         else:
             # crystals
             for address, value in zip(location.address, itemid):
