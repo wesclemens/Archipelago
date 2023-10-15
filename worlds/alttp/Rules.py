@@ -1089,7 +1089,6 @@ def bomb_rules(world, player):
     'Brewery',
     'Dark Lake Hylia Ledge Fairy',
     'Ganons Tower Moldorm Door',
-    'Graveyard Ledge Mirror Spot',
     'Hype Cave',
     'Ice Rod Cave',
     'Light Hype Fairy',
@@ -1097,6 +1096,7 @@ def bomb_rules(world, player):
     'Mini Moldorm Cave',
     'Palace of Darkness Big Key Chest Staircase',
     ]
+
     for entrance in bomb_only_entrances:
         add_rule(world.get_entrance(entrance, player), lambda state: can_use_bombs(state, player))
 
@@ -1110,6 +1110,7 @@ def bomb_rules(world, player):
         'Paradox Cave Upper - Left',
         'Paradox Cave Upper - Right',
         'Swamp Palace - Map Chest',
+        'Graveyard Cave',
         # Hacky solution to make bomb bags work please fix me
         'Ice Palace - Freezor Chest',
         'Ice Palace - Big Chest',
